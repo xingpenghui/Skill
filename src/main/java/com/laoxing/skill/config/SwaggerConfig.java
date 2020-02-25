@@ -8,6 +8,7 @@ import springfox.documentation.service.ApiInfo;
 import springfox.documentation.service.Contact;
 import springfox.documentation.spi.DocumentationType;
 import springfox.documentation.spring.web.plugins.Docket;
+import springfox.documentation.swagger2.annotations.EnableSwagger2;
 
 /**
  * @program: BootSsm
@@ -16,6 +17,7 @@ import springfox.documentation.spring.web.plugins.Docket;
  * @create: 2019-10-21 15:01
  */
 @Configuration //配置文件
+@EnableSwagger2
 public class SwaggerConfig {
     //创建文档说明
     public ApiInfo createAI(){
@@ -28,6 +30,6 @@ public class SwaggerConfig {
     @Bean
     public Docket createD(){
         return new Docket(DocumentationType.SWAGGER_2).apiInfo(createAI()).select().
-                apis(RequestHandlerSelectors.basePackage("com.laoxing.cloud.controller")).build();
+                apis(RequestHandlerSelectors.basePackage("com.laoxing.skill.controller")).build();
     }
 }
