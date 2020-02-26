@@ -1,0 +1,27 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.laoxing.skill.dao.SkillGoodsDao">
+
+    <!-- 通用查询映射结果 -->
+    <resultMap id="brm" type="com.laoxing.skill.entity.SkillGoods">
+        <id column="seckill_id" property="skid" />
+        <result column="goods_id" property="gid" />
+        <result column="seckill_price" property="sprice" />
+        <result column="seckill_stock" property="sstock" />
+        <result column="begin_time" property="stime" />
+        <result column="end_time" property="etime" />
+        <result column="seckill_url" property="surl" />
+        <result column="version" property="version" />
+    </resultMap>
+
+    <!-- 通用查询结果列 -->
+    <sql id="bcl">
+        seckill_id, goods_id, seckill_price, seckill_stock, begin_time, end_time, seckill_url, version
+    </sql>
+    <select id="selectById" resultMap="brm">
+        select <include refid="bcl"></include> from t_seckill where seckill_id=#{skid}
+    </select>
+    <update id="update">
+        update t_seckill set seckill_stock=#{count} where seckill_id=#{skid} and seckill_stock>=#{count}
+    </update>
+</mapper>

@@ -1,7 +1,12 @@
 package com.laoxing.skill.controller;
 
+import com.laoxing.skill.dto.SkillGoodsDto;
+import com.laoxing.skill.exception.OrderException;
 import com.laoxing.skill.service.OrderService;
+import com.laoxing.skill.vo.R;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.web.bind.annotation.PostMapping;
+import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RestController;
 
 /**
@@ -15,5 +20,9 @@ public class OrderController {
     @Autowired
     private OrderService service;
 
+    @PostMapping("/api/order/skillsave.do")
+    public R save(@RequestBody SkillGoodsDto goodsDto) throws OrderException {
+        return service.save(goodsDto);
+    }
 
 }

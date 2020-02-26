@@ -1,0 +1,28 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.laoxing.skill.dao.OrderDao">
+
+    <!-- 通用查询映射结果 -->
+    <resultMap id="brm" type="com.laoxing.skill.entity.Order">
+        <id column="order_id" property="oid" />
+        <result column="goods_id" property="gid" />
+        <result column="total_price" property="tprice" />
+        <result column="create_time" property="ctime" />
+        <result column="status" property="status" />
+        <result column="type" property="type" />
+        <result column="uid" property="uid" />
+    </resultMap>
+
+    <!-- 通用查询结果列 -->
+    <sql id="bcl">
+        order_id, goods_id, total_price, create_time, status, type, uid
+    </sql>
+
+    <select id="selectByUid" resultMap="brm">
+        select <include refid="bcl"></include> from t_order where goods_id=#{gid} and uid=#{uid}
+    </select>
+    <insert id="insert" parameterType="com.laoxing.skill.entity.Order">
+        insert into t_order(goods_id, total_price, create_time, status, type, uid)
+        values(#{gid},#{tprice},#{ctime},#{status},#{type},#{uid})
+    </insert>
+</mapper>

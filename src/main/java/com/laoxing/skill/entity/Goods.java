@@ -13,6 +13,6 @@ public class Goods {
     private Integer gid;
     private String gname;
     private Double gprice;
-    private Double gstock;
+    private int gstock;
     private String gimg;
 }
