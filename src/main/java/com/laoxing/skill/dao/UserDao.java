@@ -10,6 +10,5 @@ import com.laoxing.skill.entity.User;
  */
 public interface UserDao {
     int  insert(User user);
-
     User selectByPhone(String phone);
 }

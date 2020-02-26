@@ -27,4 +27,13 @@ public class RedisKeyConfig {
     public static final String USER_FREEZE="skill:userfreeze:";//后面跟手机号 String 有效期 30分钟
 
     public static final int USER_FREEZE_TIME=30;//有效期 30分钟
+
+    //记录秒杀商品的库存 Hash 字段：秒杀商品id 值：库存量
+    public static final String SKILL_GOODS="skill:goodskc";//记录秒杀的商品和对应的库存 有效期 永久删除
+
+    //记录秒杀订单
+    public static final String SKILL_ORDER="skill:order";//记录秒杀的订单 Hash
+
+    //记录令牌桶的 令牌信息
+    public static final String LIMIT_BUCKET="skill:limit";//采用List 存储令牌 永久有效
 }

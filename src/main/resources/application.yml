@@ -13,8 +13,9 @@ spring:
     password: qfjava
     database: 0
     timeout: 5000
+#自定义
 skill:
   maxcount: 3  #自定义属性 设置秒杀的数量上限
-  passkey: L/417pJvHIvWTSRD6IC9kg==
+  passkey: L/417pJvHIvWTSRD6IC9kg==  #密码的key
 mybatis:
   mapper-locations: classpath*:/mapper/*.xml

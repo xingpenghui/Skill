@@ -116,4 +116,14 @@ public class UserServiceImpl implements UserService {
             }
         }
     }
+
+    @Override
+    public R register(LoginDto dto) {
+        return null;
+    }
+
+    @Override
+    public R checkPhone(String phone) {
+        return null;
+    }
 }

@@ -14,5 +14,9 @@ public interface UserService {
     R login(LoginDto dto);
     //校验令牌 的有效性
     R checkToken(String token);
+    //注册
+    R register(LoginDto dto);
+    //校验手机号
+    R checkPhone(String phone);
 
 }

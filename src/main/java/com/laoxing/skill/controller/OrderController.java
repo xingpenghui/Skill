@@ -25,4 +25,8 @@ public class OrderController {
         return service.save(goodsDto);
     }
 
+    @PostMapping("/api/order/v2/skillsave.do")
+    public R savev2(@RequestBody SkillGoodsDto goodsDto) throws OrderException {
+        return service.save(goodsDto);
+    }
 }
