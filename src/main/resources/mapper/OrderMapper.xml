@@ -22,7 +22,7 @@
         select <include refid="bcl"></include> from t_order where goods_id=#{gid} and uid=#{uid}
     </select>
     <insert id="insert" parameterType="com.laoxing.skill.entity.Order">
-        insert into t_order(goods_id, total_price, create_time, status, type, uid)
-        values(#{gid},#{tprice},#{ctime},#{status},#{type},#{uid})
+        insert into t_order(order_id,goods_id, total_price, create_time, status, type, uid)
+        values(#{oid},#{gid},#{tprice},#{ctime},#{status},#{type},#{uid})
     </insert>
 </mapper>

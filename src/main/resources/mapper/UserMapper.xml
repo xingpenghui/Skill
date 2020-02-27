@@ -16,8 +16,7 @@
     <select id="selectByPhone" resultMap="brm">
         select <include refid="bcl"></include> from t_user where phone=#{phone}
     </select>
-    <insert id="insert" parameterType="com.laoxing.skill.entity.User">
-        insert into t_user(phone, password) values(#{phone},#{password})
+    <insert id="insert" parameterType="com.laoxing.skill.dto.LoginDto">
+        insert into t_user(phone, password) values(#{phone},#{pwd})
     </insert>
-
 </mapper>

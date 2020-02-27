@@ -13,4 +13,7 @@ public interface OrderDao {
 
     Order selectByUid(@Param("uid") int uid,@Param("gid") int gid);
     int insert(Order order);
+    Order selectById(long oid);
+
+    int update(@Param("oid") long oid,@Param("status") int status);
 }

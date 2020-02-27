@@ -9,13 +9,17 @@ import com.laoxing.skill.entity.Order;
 import com.laoxing.skill.entity.SkillGoods;
 import com.laoxing.skill.exception.OrderException;
 import com.laoxing.skill.service.OrderService;
+import com.laoxing.skill.util.IdGenerator;
 import com.laoxing.skill.vo.R;
+import org.springframework.amqp.rabbit.core.RabbitTemplate;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.data.redis.core.StringRedisTemplate;
 import org.springframework.stereotype.Service;
 
 import java.util.Date;
+import java.util.HashMap;
+import java.util.Map;
 import java.util.concurrent.ConcurrentHashMap;
 import java.util.concurrent.locks.Lock;
 import java.util.concurrent.locks.ReentrantLock;
@@ -31,7 +35,7 @@ public class OrderServiceImpl implements OrderService {
     //注入属性的值
     @Value("${skill.maxcount}")
     private int maxCount;//秒杀的商品数量的上限  每个用户
-
+    private IdGenerator idGenerator=new IdGenerator();
     @Autowired
     private SkillGoodsDao goodsDao;
     @Autowired
@@ -40,6 +44,11 @@ public class OrderServiceImpl implements OrderService {
     private StringRedisTemplate redisTemplate;
     //辅助 Redis 实现预减库存 记录已售罄的商品
     private ConcurrentHashMap<Integer,Boolean> map=new ConcurrentHashMap<>();
+    public ConcurrentHashMap getMap(){
+        return map;
+    }
+    @Autowired
+    private RabbitTemplate rabbitTemplate;
 
     @Override
     public R save(SkillGoodsDto goodsDto) throws OrderException {
@@ -126,14 +135,19 @@ public class OrderServiceImpl implements OrderService {
                                 goodsDto.getGid() + ":" + uid)) {
                             //5.生成订单 ---Redis
                             Order order1 = new Order();
-                            order1.setOid((int) System.currentTimeMillis() / 1000);
+                            order1.setOid(idGenerator.nextId());
                             order1.setStatus(1);
                             order1.setSgid(goodsDto.getGid());
                             order1.setUid(uid);
                             redisTemplate.opsForHash().put(RedisKeyConfig.SKILL_ORDER,
                                     goodsDto.getGid() + ":" + uid, JSON.toJSON(order1));
                             //RabbitMQ --消息机制 异步操作 Mysql中订单的生成
-
+                            Map<String,Object> mqmap=new HashMap<>();
+                            mqmap.put("count",goodsDto.getCount());
+                            mqmap.put("order",order1);
+                            rabbitTemplate.convertAndSend(
+                                    "skill.exchange.order",
+                                    mqmap);
                             //6.订单生成成功-Redis中的库存 进行预减
                             redisTemplate.opsForHash().put(RedisKeyConfig.SKILL_GOODS, goodsDto.getGid(), c - goodsDto.getCount());
                             if(c-goodsDto.getCount()==0){

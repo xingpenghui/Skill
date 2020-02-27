@@ -80,7 +80,7 @@ public class UserServiceImpl implements UserService {
                     int r = 0;
                     //8.校验失败次数 是否冻结账号
                     Set set = redisTemplate.keys(
-                            RedisKeyConfig.USER_PASSFAIL + dto.getPhone());
+                            RedisKeyConfig.USER_PASSFAIL + dto.getPhone()+":*");
                     if (set != null && set.size() > 1) {
                         r = set.size();
                         //需要冻结 之前错误至少2次+这一次  三次
@@ -89,7 +89,7 @@ public class UserServiceImpl implements UserService {
                                 RedisKeyConfig.USER_FREEZE_TIME, TimeUnit.MINUTES);
                     }
                     //9.记录本次的失败
-                    redisTemplate.opsForValue().set(RedisKeyConfig.USER_FREEZE + dto.getPhone()
+                    redisTemplate.opsForValue().set(RedisKeyConfig.USER_PASSFAIL + dto.getPhone()
                                     + ":" + System.currentTimeMillis(), "", RedisKeyConfig.TOKEN_FAIL,
                             TimeUnit.MINUTES);
                     r += 1;
@@ -119,11 +119,24 @@ public class UserServiceImpl implements UserService {
 
     @Override
     public R register(LoginDto dto) {
-        return null;
+        if(userDao.selectByPhone(dto.getPhone())==null) {
+            dto.setPwd(EncryptUtil.aesenc(passkey, dto.getPwd()));
+            if (userDao.insert(dto) > 0) {
+                return R.ok();
+            } else {
+                return R.fail("网络异常");
+            }
+        }else {
+            return R.fail("亲，手机号已经被注册");
+        }
     }
 
     @Override
     public R checkPhone(String phone) {
-        return null;
+        if(userDao.selectByPhone(phone)==null) {
+            return R.ok();
+        }else {
+            return R.fail("亲，手机号已经被注册");
+        }
     }
 }

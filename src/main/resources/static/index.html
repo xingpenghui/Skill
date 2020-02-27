@@ -1,0 +1,49 @@
+<!DOCTYPE html>
+<!-- 
+
+                              _.._        ,------------.
+                           ,'      `.    (I want you! )
+                          /  __) __` \    `-,----------'
+                         (  (`-`(-')  ) _.-'
+                         /)  \  = /  (
+                        /'    |--' .  \
+                       (  ,---|  `-.)__`
+                        )(  `-.,--'   _`-.
+                       '/,'          (  Uu",
+                        (_       ,    `/,-' )
+                        `.__,  : `-'/  /`--'
+                          |     `--'  |
+                          `   `-._   /
+                           \        (
+                           /\ .      \.  
+                          / |` \     ,-\
+                         /  \| .)   /   \
+                        ( ,'|\    ,'     :
+                        | \,`.`--"/      }
+                        `,'    \  |,'    /
+                       / "-._   `-/      |
+                       "-.   "-.,'|     ;
+                      /        _/["---'""]
+                     :        /  |"-     '
+                     '           |      /
+                                 `      |
+
+-->
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>支付宝支付</title>
+</head>
+<body>
+    <form method="post" action="http://localhost:8901/api/pay/alipaypre.do">
+        <div>
+            <label>商品名称：</label><input name="subject">
+        </div>
+        <div>
+            <label>订单编号：</label><input name="out_trade_no">
+        </div>
+        <div> <input type="submit" value="发起支付">发起支付</div>
+
+    </form>
+</body>
+</html>
