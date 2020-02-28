@@ -35,6 +35,8 @@
     <title>支付宝支付</title>
 </head>
 <body>
+    <!--生成支付信息-->
+    <div>
     <form method="post" action="http://localhost:8901/api/pay/alipaypre.do">
         <div>
             <label>商品名称：</label><input name="subject">
@@ -43,7 +45,27 @@
             <label>订单编号：</label><input name="out_trade_no">
         </div>
         <div> <input type="submit" value="发起支付">发起支付</div>
-
     </form>
+    </div>
+
+
+    <div>
+        <form method="post" action="http://localhost:8901/api/pay/wxpayprepay.do">
+            <div>
+                <label>商品名称：</label><input name="body">
+            </div>
+            <div>
+                <label>订单编号：</label><input name="out_trade_no">
+            </div>
+            <div> <input type="submit" value="发起支付">发起支付</div>
+        </form>
+    </div>
+<!--2.查询支付状态-->
+    <div>
+        <form action="" method="get">
+            <div><label>输入订单号：</label><input name="oid"></div>
+            <div><input type="submit" value="查询订单支付状态">查询订单支付状态</div>
+        </form>
+    </div>
 </body>
 </html>

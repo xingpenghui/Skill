@@ -46,12 +46,24 @@ public class EncryptUtil {
     }
 
     //MD5 摘要
-    public static String md5(String msg) {
+    public static String md5Base64(String msg) {
         try {
             //创建摘要算法对象
             MessageDigest messageDigest = MessageDigest.getInstance ("MD5");
             messageDigest.update (msg.getBytes ());
             return base64encByte (messageDigest.digest ());
+        } catch (NoSuchAlgorithmException e) {
+            e.printStackTrace ();
+        }
+        return null;
+    }
+    //MD5 摘要
+    public static String md5(String msg) {
+        try {
+            //创建摘要算法对象
+            MessageDigest messageDigest = MessageDigest.getInstance ("MD5");
+            messageDigest.update(msg.getBytes());
+            return new String(messageDigest.digest());
         } catch (NoSuchAlgorithmException e) {
             e.printStackTrace ();
         }

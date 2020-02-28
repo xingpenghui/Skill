@@ -4,12 +4,8 @@ import com.alibaba.fastjson.JSON;
 import com.alipay.api.AlipayApiException;
 import com.alipay.api.AlipayClient;
 import com.alipay.api.DefaultAlipayClient;
-import com.alipay.api.request.AlipayTradePagePayRequest;
-import com.alipay.api.request.AlipayTradePrecreateRequest;
-import com.alipay.api.request.AlipayTradeQueryRequest;
-import com.alipay.api.response.AlipayTradePagePayResponse;
-import com.alipay.api.response.AlipayTradePrecreateResponse;
-import com.alipay.api.response.AlipayTradeQueryResponse;
+import com.alipay.api.request.*;
+import com.alipay.api.response.*;
 import com.laoxing.skill.dto.AliPayDto;
 
 /**
@@ -78,6 +74,48 @@ public class AliPayUtil {
             return response.getTradeStatus();
         }else {
             return "支付宝暂时故障";
+        }
+    }
+    /**
+     * alipay.trade.cancel(统一收单交易撤销接口)*/
+    public static String cancelPay(String oid) throws AlipayApiException {
+        AlipayTradeCancelRequest request = new AlipayTradeCancelRequest();
+        request.setBizContent("{\"out_trade_no\":\""+oid+"\"}");
+        AlipayTradeCancelResponse response = alipayClient.execute(request);
+        if(response.isSuccess()){
+            System.out.println("调用成功");
+            return response.getAction();
+        } else {
+            System.out.println("调用失败");
+            return null;
+        }
+    }
+    /**
+     * alipay.trade.refund(统一收单交易退款接口) */
+    public static String refundPay(String oid) throws AlipayApiException {
+        AlipayTradeRefundRequest  request = new AlipayTradeRefundRequest ();
+        request.setBizContent("{\"out_trade_no\":\""+oid+"\",\"refund_amount\":0.01}");
+        AlipayTradeRefundResponse response = alipayClient.execute(request);
+        if(response.isSuccess()){
+            System.out.println("调用成功");
+            return response.getPresentRefundBuyerAmount();
+        } else {
+            System.out.println("调用失败");
+            return null;
+        }
+    }
+    /**
+     * alipay.trade.fastpay.refund.query(统一收单交易退款查询)*/
+    public static String queryRefundPay(String oid) throws AlipayApiException {
+        AlipayTradeFastpayRefundQueryRequest request = new AlipayTradeFastpayRefundQueryRequest();
+        request.setBizContent("{\"out_trade_no\":\""+oid+"\",\"out_request_no\":\""+oid+"\"}");
+        AlipayTradeFastpayRefundQueryResponse response = alipayClient.execute(request);
+        if(response.isSuccess()){
+            System.out.println("调用成功");
+            return response.getRefundAmount();
+        } else {
+            System.out.println("调用失败");
+            return null;
         }
     }
 }

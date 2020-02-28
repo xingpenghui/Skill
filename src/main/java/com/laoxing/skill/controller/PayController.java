@@ -2,7 +2,9 @@ package com.laoxing.skill.controller;
 
 import com.alipay.api.AlipayApiException;
 import com.laoxing.skill.dto.AliPayDto;
+import com.laoxing.skill.dto.WxPayDto;
 import com.laoxing.skill.pay.AliPayUtil;
+import com.laoxing.skill.pay.WxchatPayUtil;
 import com.laoxing.skill.util.QrcodeUtil;
 import com.laoxing.skill.vo.R;
 import org.springframework.stereotype.Controller;
@@ -21,6 +23,7 @@ import java.io.IOException;
  */
 @Controller
 public class PayController {
+    //付款
     @PostMapping("api/pay/alipaypre.do")
     public void pay(AliPayDto dto, HttpServletResponse response) throws AlipayApiException, IOException {
        dto.setTotal_amount(0.01);
@@ -33,9 +36,39 @@ public class PayController {
            ImageIO.write(bufferedImage,"jpeg",response.getOutputStream());
        }
     }
+    //查询支付
     @GetMapping("api/pay/alipayquery.do")
     @ResponseBody
     public R query(String oid) throws AlipayApiException {
         return R.ok(AliPayUtil.queryPayStatus(oid));
+    }
+    //取消支付
+    @GetMapping("api/pay/alipaycancel.do")
+    @ResponseBody
+    public R cancenl(String oid) throws AlipayApiException {
+        return R.ok(AliPayUtil.cancelPay(oid));
+    }
+    //退款
+    @GetMapping("api/pay/alipayrefund.do")
+    @ResponseBody
+    public R refund(String oid) throws AlipayApiException {
+        return R.ok(AliPayUtil.refundPay(oid));
+    }
+    @GetMapping("api/pay/alipayrefundquery.do")
+    @ResponseBody
+    public R refundquery(String oid) throws AlipayApiException {
+        return R.ok(AliPayUtil.queryRefundPay(oid));
+    }
+    //20200101006
+    @PostMapping("api/pay/wxpayprepay.do")
+    public void createWxPay(WxPayDto payDto,HttpServletResponse response) throws IOException {
+        payDto.setTotal_fee(1);
+        String u= WxchatPayUtil.createPay(payDto);
+        if(u!=null){
+            //生成缓存 二维码图片
+            BufferedImage bufferedImage=QrcodeUtil.createQrcode(u,400);
+            //将图片写出去
+            ImageIO.write(bufferedImage,"jpeg",response.getOutputStream());
+        }
     }
 }
