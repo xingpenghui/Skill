@@ -30,7 +30,8 @@ public class WxchatPayUtil {
     private static final String APPID="wx632c8f211f8122c6";
     private static final String MCHID="1497984412";
     private static final String APPKEY="sbNCm1JnevqI36LrEaxFwcaT0hkGxFnC";
-
+    //回调接口  注意地址：必须是公网可以访问的
+    private static final String CALL_URL="http://localhost:8901/api/pay/wxchatnotify.do";
     //微信支付常用接口
     //统一下单
     private static final String prepay="https://api.mch.weixin.qq.com/pay/unifiedorder";
@@ -117,7 +118,7 @@ public class WxchatPayUtil {
     public static String createPay(WxPayDto dto){
         TreeMap<String,Object> map=createParam();
         map.put("trade_type","NATIVE");
-        map.put("notify_url","http://192.168.2.1/callback.do");
+        map.put("notify_url",CALL_URL);
         map.put("body",dto.getBody());
         map.put("out_trade_no",dto.getOut_trade_no());
         map.put("total_fee",dto.getTotal_fee());
@@ -131,6 +132,52 @@ public class WxchatPayUtil {
                 HashMap<String,Object> resMap=parseXml(responseXml);
                 if(resMap.containsKey("code_url")){
                     return resMap.get("code_url").toString();
+                }else {
+                    System.out.println(resMap.get("return_msg").toString());
+                }
+            }
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+        return null;
+    }
+    /**
+     * 查询微信支付的 支付状态*/
+    public static String queryPay(String oid){
+        TreeMap<String,Object> map=createParam();
+        map.put("out_trade_no",oid);
+        map.put("sign",createSign(map));
+        try {
+            //生成请求的xml
+            String requestXml=createXML(map);
+            String responseXml=HttpUtil.postData(querypay,requestXml);
+            if(responseXml!=null){
+                HashMap<String,Object> resMap=parseXml(responseXml);
+                if(resMap.containsKey("trade_state")){
+                    return resMap.get("trade_state").toString();
+                }else {
+                    System.out.println(resMap.get("return_msg").toString());
+                }
+            }
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+        return null;
+    }
+    /**
+     * 取消微信支付*/
+    public static String closePay(String oid){
+        TreeMap<String,Object> map=createParam();
+        map.put("out_trade_no",oid);
+        map.put("sign",createSign(map));
+        try {
+            //生成请求的xml
+            String requestXml=createXML(map);
+            String responseXml=HttpUtil.postData(closepay,requestXml);
+            if(responseXml!=null){
+                HashMap<String,Object> resMap=parseXml(responseXml);
+                if(resMap.containsKey("result_code")){
+                    return resMap.get("result_code").toString();
                 }else {
                     System.out.println(resMap.get("return_msg").toString());
                 }
