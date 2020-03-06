@@ -36,4 +36,9 @@ public class RedisKeyConfig {
 
     //记录令牌桶的 令牌信息
     public static final String LIMIT_BUCKET="skill:limit";//采用List 存储令牌 永久有效
+
+    //记录秒杀商品对应的 秒杀接口的地址变量(密文)
+    public static final String SKILL_API="skill:api:";//后面跟上秒杀商品的id ，值为地址变量 密文
+    //对应的有效期
+    public static final int API_TIME=60;//有效期 1分钟
 }

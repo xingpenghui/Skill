@@ -9,6 +9,7 @@ import com.laoxing.skill.pay.WxchatPayUtil;
 import com.laoxing.skill.util.QrcodeUtil;
 import com.laoxing.skill.vo.R;
 import io.goeasy.GoEasy;
+import org.mybatis.spring.SqlSessionFactoryBean;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.*;
 
@@ -17,7 +18,10 @@ import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import java.awt.image.BufferedImage;
 import java.io.IOException;
+import java.lang.ref.SoftReference;
+import java.util.ArrayList;
 import java.util.HashMap;
+import java.util.concurrent.ConcurrentHashMap;
 
 /**
  * @program: Skill
@@ -94,6 +98,12 @@ public class PayController {
     //接收微信支付的异步通知 如果说微信支付成功，微信方 会请求我们的接口
     @GetMapping("api/pay/wxchatnotify.do")
     public void notify(HttpServletRequest request,HttpServletResponse response) throws Exception {
+       ArrayList list;
+       HashMap map1;
+        SqlSessionFactoryBean bean;
+       //finalize();
+       // SoftReference;
+       ConcurrentHashMap map2;
         //1.接收消息
         String xml=new String(IOUtils.toByteArray(request.getInputStream()));
         HashMap<String,Object> map=WxchatPayUtil.parseXml(xml);

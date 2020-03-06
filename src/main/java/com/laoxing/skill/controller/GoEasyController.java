@@ -3,6 +3,7 @@ package com.laoxing.skill.controller;
 import io.goeasy.GoEasy;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.servlet.DispatcherServlet;
 
 /**
  * @program: Skill
@@ -16,6 +17,7 @@ public class GoEasyController {
 
     @GetMapping("/api/chat/msg")
     public String sendMsg(){
+        DispatcherServlet s;
         goEasy.publish("my_channel", "Hello, GoEasy!");
         return "OK";
     }
